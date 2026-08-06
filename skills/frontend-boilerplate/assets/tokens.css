@@ -1,0 +1,305 @@
+/* src/shared/styles/tokens.css
+ *
+ * 12段の階調、活字、間隔、角丸、影、動き、密度、外観プリセット。
+ * 変えるのは原則として次の3つだけ。--hue-accent / --hue-gray / --contrast
+ *
+ * 既定の外観は「没入型」。暗色を地とし、内容に彩度を持たせ、骨格は無彩に寄せる。
+ * 情報密度を優先する画面では :root に data-appearance="productive" を付ける。
+ * 規範は references/visual-craft.md 第12節。
+ *
+ * 変数名は Tailwind の @theme 名前空間（--color-* --text-* --font-* --radius-* --shadow-* --ease-*）と
+ * 衝突しない接頭辞にしている。同名にすると @theme inline で自己参照になり解決できない。
+ */
+
+:root {
+  /* ============ 1. 変える3変数 ============ */
+  /* 強調色は意味色（危険25 / 注意78 / 成功152）から色相を30度以上離す */
+  --hue-accent: 318;
+  /* 骨格は無彩に寄せる。内容が彩度を持つため、chrome が色を持つと競合する */
+  --hue-gray: 280;
+  /* 明度を 0.5 から遠ざけると対比が上がる。1 が標準、1.3 で高コントラスト */
+  --contrast: 1;
+
+  /* 骨格の彩度の強さ。没入型は 1（ほぼ無彩）、実務型は 3 でわずかに色を帯びる */
+  --chroma-chrome: 1;
+
+  /* ============ 2. 12段の明度（既定は暗色。地は近黒） ============ */
+  --l-1: 0.155;
+  --l-2: 0.185;
+  --l-3: 0.222;
+  --l-4: 0.255;
+  --l-5: 0.29;
+  --l-6: 0.335;
+  --l-7: 0.4;
+  --l-8: 0.495;
+  --l-9: 0.575;
+  --l-10: 0.63;
+  --l-11: 0.755;
+  --l-12: 0.96;
+
+  /* 灰の段11だけ意味色の段11より淡くする。補足文字は読み飛ばせる情報で、
+     エラーや成功のように必ず読ませる意味色とは要求される対比が違う。
+     基準は budgets.json の contrast.secondaryText */
+  --l-muted: 0.635;
+
+  /* 文字段（11, 12）だけ対比変数を効かせる。面と枠まで動かすと階調の関係が崩れる */
+  /* 識別に必要な境界の明度。地に対して 3:1 を満たす位置に置く */
+  --l-control-edge: 0.5;
+
+  --l-muted-adj: clamp(0, calc(0.5 + (var(--l-muted) - 0.5) * var(--contrast)), 1);
+  --l-11-adj: clamp(0, calc(0.5 + (var(--l-11) - 0.5) * var(--contrast)), 1);
+  --l-12-adj: clamp(0, calc(0.5 + (var(--l-12) - 0.5) * var(--contrast)), 1);
+
+  /* ============ 3. 灰の12段 ============ */
+  --gray-1: oklch(var(--l-1) calc(0.002 * var(--chroma-chrome)) var(--hue-gray));
+  --gray-2: oklch(var(--l-2) calc(0.003 * var(--chroma-chrome)) var(--hue-gray));
+  --gray-3: oklch(var(--l-3) calc(0.004 * var(--chroma-chrome)) var(--hue-gray));
+  --gray-4: oklch(var(--l-4) calc(0.005 * var(--chroma-chrome)) var(--hue-gray));
+  --gray-5: oklch(var(--l-5) calc(0.006 * var(--chroma-chrome)) var(--hue-gray));
+  --gray-6: oklch(var(--l-6) calc(0.007 * var(--chroma-chrome)) var(--hue-gray));
+  --gray-7: oklch(var(--l-7) calc(0.008 * var(--chroma-chrome)) var(--hue-gray));
+  --gray-8: oklch(var(--l-8) calc(0.009 * var(--chroma-chrome)) var(--hue-gray));
+  --gray-9: oklch(var(--l-9) calc(0.01 * var(--chroma-chrome)) var(--hue-gray));
+  --gray-10: oklch(var(--l-10) calc(0.009 * var(--chroma-chrome)) var(--hue-gray));
+  /* 灰だけ --l-muted-adj を使う。意味色の段11は --l-11-adj のまま AA を満たす */
+  --gray-11: oklch(var(--l-muted-adj) calc(0.008 * var(--chroma-chrome)) var(--hue-gray));
+  --gray-12: oklch(var(--l-12-adj) calc(0.006 * var(--chroma-chrome)) var(--hue-gray));
+
+  /* ============ 4. 強調色の12段。9 が最も純度が高い ============ */
+  --accent-1: oklch(var(--l-1) 0.012 var(--hue-accent));
+  --accent-2: oklch(var(--l-2) 0.024 var(--hue-accent));
+  --accent-3: oklch(var(--l-3) 0.045 var(--hue-accent));
+  --accent-4: oklch(var(--l-4) 0.062 var(--hue-accent));
+  --accent-5: oklch(var(--l-5) 0.08 var(--hue-accent));
+  --accent-6: oklch(var(--l-6) 0.1 var(--hue-accent));
+  --accent-7: oklch(var(--l-7) 0.125 var(--hue-accent));
+  --accent-8: oklch(var(--l-8) 0.16 var(--hue-accent));
+  --accent-9: oklch(0.565 0.215 var(--hue-accent));
+  --accent-10: oklch(0.605 0.205 var(--hue-accent));
+  --accent-11: oklch(var(--l-11-adj) 0.14 var(--hue-accent));
+  --accent-12: oklch(var(--l-12-adj) 0.05 var(--hue-accent));
+
+  /* ============ 5. 意味色。9 / 10 / 11 と控えめな面の4つ ============ */
+  --danger-9: oklch(0.6 0.21 25);
+  --danger-10: oklch(0.645 0.2 25);
+  --danger-11: oklch(var(--l-11-adj) 0.16 25);
+  --danger-bg: oklch(calc(var(--l-3) + 0.02) 0.05 25);
+  --warning-9: oklch(0.79 0.16 78);
+  --warning-10: oklch(0.83 0.15 78);
+  --warning-11: oklch(var(--l-11-adj) 0.11 84);
+  --warning-bg: oklch(calc(var(--l-3) + 0.02) 0.045 78);
+  --success-9: oklch(0.7 0.17 152);
+  --success-10: oklch(0.745 0.16 152);
+  --success-11: oklch(var(--l-11-adj) 0.13 152);
+  --success-bg: oklch(calc(var(--l-3) + 0.02) 0.045 152);
+
+  /* ============ 6. 用途への割り当て ============ */
+  --bg: var(--gray-1); /* 1: 画面の地 */
+  --bg-subtle: var(--gray-2); /* 2: 沈めた面、縞、コード */
+  --comp: var(--gray-3); /* 3: 部品の面 */
+  --comp-hover: var(--gray-4); /* 4: 部品の面（hover） */
+  --comp-active: var(--gray-5); /* 5: 部品の面（押下・選択） */
+  --line: var(--gray-6); /* 6: 非対話要素の罫線と区切り */
+  --edge: var(--gray-7); /* 7: 対話要素の枠 */
+  --edge-hover: var(--gray-8); /* 8: 対話要素の枠（hover） */
+  /* 段の別名は必要になった時点で足す。12段の階調（--gray-* --accent-*）は直接参照できる */
+  /* 部品の識別に境界が必要な場合（入力欄など）に使う。12段は段7に 3:1 を保証しないため専用に持つ */
+  --edge-control: oklch(var(--l-control-edge) calc(0.008 * var(--chroma-chrome)) var(--hue-gray));
+  --fg-muted: var(--gray-11); /* 11: 低対比の文字 */
+  --fg: var(--gray-12); /* 12: 高対比の文字 */
+
+  --acc-bg: var(--accent-3);
+  --acc-edge: var(--accent-7);
+  --acc-solid: var(--accent-9);
+  --acc-solid-hover: var(--accent-10);
+  --acc-fg: var(--accent-11);
+  /* 9 の上に載せる文字。強調色の色相によっては暗い文字が必要になるため個別に見直す */
+  --on-solid: oklch(0.99 0.005 var(--hue-accent));
+
+  --focus-ring: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent-9);
+
+  /* ============ 7. 活字 ============ */
+  --ff-sans: Inter, InterVariable, system-ui, -apple-system, 'Hiragino Kaku Gothic ProN',
+    'Noto Sans JP', sans-serif;
+  --ff-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --fs-base: 0.875rem;
+
+  --fs-2xs: 0.6875rem;
+  --fs-xs: 0.75rem;
+  --fs-sm: 0.8125rem;
+  --fs-md: var(--fs-base);
+  --fs-lg: 1rem;
+  --fs-xl: 1.125rem;
+  /* 見出しだけ流体にする。小画面と大画面で別の階比を持たせ、その間を補間する */
+  --fs-2xl: clamp(1.25rem, 1.05rem + 0.8vw, 1.5rem);
+  --fs-3xl: clamp(1.625rem, 1.2rem + 1.7vw, 2.25rem);
+  --fs-4xl: clamp(2rem, 1.35rem + 2.8vw, 3.25rem);
+  /* 数値や題名を主役に据えるための特大。没入型の要 */
+  --fs-hero: clamp(2.5rem, 1.6rem + 4vw, 4.5rem);
+
+  --lh-tight: 1.12;
+  --lh-snug: 1.4;
+  --lh-normal: 1.7;
+
+  /* 寸法が上がるほど詰め、小さい文字はわずかに開く */
+  --ls-hero: -0.035em;
+  --ls-tight: -0.022em;
+  --ls-snug: -0.012em;
+  --ls-normal: 0;
+  --ls-wide: 0.02em;
+  --ls-caps: 0.08em;
+
+  /* ============ 8. 間隔。2 / 4 / 8 の倍数で刻む ============ */
+  --space-1: 0.125rem;
+  --space-2: 0.25rem;
+  --space-3: 0.375rem;
+  --space-4: 0.5rem;
+  --space-5: 0.75rem;
+  --space-6: 1rem;
+  --space-7: 1.5rem;
+  --space-8: 2rem;
+  --space-9: 2.5rem;
+  --space-10: 3rem;
+  --space-11: 4rem;
+  --space-12: 6rem;
+
+  /* ============ 9. 角丸 ============ */
+  --r-2: 0.25rem;
+  --r-3: 0.375rem;
+  --r-4: 0.5rem;
+  --r-6: 0.75rem;
+  --r-full: 999px;
+
+  /* ============ 10. 影。暗色では影が効きにくいため、面の明度差と併用する ============ */
+  --elev-1: 0 1px 2px oklch(0 0 0 / 0.4);
+  --elev-2: 0 2px 4px oklch(0 0 0 / 0.4), 0 8px 20px oklch(0 0 0 / 0.35);
+  --elev-3: 0 2px 4px oklch(0 0 0 / 0.45), 0 16px 40px oklch(0 0 0 / 0.45);
+
+  /* ============ 11. 動き ============ */
+  --dur-1: 70ms; /* ボタンや切替の微細な反応 */
+  --dur-2: 110ms; /* 淡い出現と消失 */
+  --dur-3: 150ms; /* 小さな展開、短距離の移動 */
+  --dur-4: 240ms; /* 展開、通知 */
+  --dur-5: 400ms; /* 大きな展開、重要な通知 */
+  --dur-6: 700ms; /* 背景の減光 */
+
+  --curve-standard: cubic-bezier(0.2, 0, 0.38, 0.9);
+  --curve-entrance: cubic-bezier(0, 0, 0.38, 0.9);
+  --curve-exit: cubic-bezier(0.2, 0, 1, 0.9);
+  --curve-standard-x: cubic-bezier(0.4, 0.14, 0.3, 1);
+  --curve-entrance-x: cubic-bezier(0, 0, 0.3, 1);
+  --curve-exit-x: cubic-bezier(0.4, 0.14, 1, 1);
+
+  /* ============ 12. 外観プリセットの変数 ============ */
+  /* 画像や図の上に文字を載せるときの覆い。可読性のための機能であり装飾ではない */
+  --scrim-bottom: linear-gradient(
+    to top,
+    oklch(0.12 0 0 / 0.94) 0%,
+    oklch(0.12 0 0 / 0.72) 32%,
+    oklch(0.12 0 0 / 0.1) 72%,
+    transparent 100%
+  );
+  /* hover の応答は枠の色替えではなく寸法と影で行う */
+  --lift: 1.02;
+
+  /* ============ 13. 制御の寸法 ============ */
+  /* sm は budgets.json の target.minPx と同値。これ以上小さくしない */
+  --control-sm: 1.5rem;
+  --control-md: 2.25rem;
+  --control-lg: 2.75rem;
+}
+
+/* 情報密度を優先する外観。骨格にわずかな色を帯びさせ、余白と特大寸法を抑える */
+:root[data-appearance='productive'] {
+  --chroma-chrome: 3;
+  --fs-hero: clamp(1.75rem, 1.3rem + 1.8vw, 2.5rem);
+  --ls-hero: -0.02em;
+  --lift: 1;
+}
+
+/* 密度は部分にも当てられる。一覧や表の区画だけ詰める用途があるため :root に限定しない */
+[data-density='expressive'] {
+  --fs-base: 1rem;
+  --lh-normal: 1.8;
+  --control-md: 2.5rem;
+}
+
+/* 一覧や表を詰める密度。control-md は下限より余裕を残し、走査中の誤操作を避ける */
+[data-density='compact'] {
+  --fs-base: 0.8125rem;
+  --lh-normal: 1.6;
+  --control-md: 2rem;
+}
+
+/* 明色は利用者の設定で有効になる。既定は暗色 */
+@media (prefers-color-scheme: light) {
+  :root {
+    --l-control-edge: 0.6;
+    --l-1: 0.995;
+    --l-2: 0.978;
+    --l-3: 0.954;
+    --l-4: 0.93;
+    --l-5: 0.905;
+    --l-6: 0.875;
+    --l-7: 0.835;
+    --l-8: 0.775;
+    --l-9: 0.565;
+    --l-10: 0.52;
+    --l-11: 0.5;
+    --l-muted: 0.6;
+    --l-12: 0.24;
+    --elev-1: 0 1px 2px oklch(0.2 0.01 var(--hue-gray) / 0.07);
+    --elev-2: 0 1px 2px oklch(0.2 0.01 var(--hue-gray) / 0.07),
+      0 6px 16px oklch(0.2 0.01 var(--hue-gray) / 0.09);
+    --elev-3: 0 1px 2px oklch(0.2 0.01 var(--hue-gray) / 0.09),
+      0 12px 32px oklch(0.2 0.01 var(--hue-gray) / 0.14);
+  }
+}
+
+/* 属性セレクタは詳細度が上なので、利用者の切り替えが両方向で優先される */
+:root[data-theme='light'] {
+  --l-control-edge: 0.6;
+  --l-1: 0.995;
+  --l-2: 0.978;
+  --l-3: 0.954;
+  --l-4: 0.93;
+  --l-5: 0.905;
+  --l-6: 0.875;
+  --l-7: 0.835;
+  --l-8: 0.775;
+  --l-9: 0.565;
+  --l-10: 0.52;
+  --l-11: 0.5;
+  --l-muted: 0.6;
+  --l-12: 0.24;
+  --elev-1: 0 1px 2px oklch(0.2 0.01 var(--hue-gray) / 0.07);
+  --elev-2: 0 1px 2px oklch(0.2 0.01 var(--hue-gray) / 0.07),
+    0 6px 16px oklch(0.2 0.01 var(--hue-gray) / 0.09);
+  --elev-3: 0 1px 2px oklch(0.2 0.01 var(--hue-gray) / 0.09),
+    0 12px 32px oklch(0.2 0.01 var(--hue-gray) / 0.14);
+}
+
+:root[data-theme='dark'] {
+  --l-control-edge: 0.5;
+  --l-1: 0.155;
+  --l-2: 0.185;
+  --l-3: 0.222;
+  --l-4: 0.255;
+  --l-5: 0.29;
+  --l-6: 0.335;
+  --l-7: 0.4;
+  --l-8: 0.495;
+  --l-9: 0.575;
+  --l-10: 0.63;
+  --l-11: 0.755;
+  --l-muted: 0.635;
+  --l-12: 0.96;
+  --elev-1: 0 1px 2px oklch(0 0 0 / 0.4);
+  --elev-2: 0 2px 4px oklch(0 0 0 / 0.4), 0 8px 20px oklch(0 0 0 / 0.35);
+  --elev-3: 0 2px 4px oklch(0 0 0 / 0.45), 0 16px 40px oklch(0 0 0 / 0.45);
+}
+
+:root[data-contrast='high'] {
+  --contrast: 1.3;
+}

@@ -1,0 +1,65 @@
+{
+  "_": "数値の単一情報源。プロジェクトへは e2e/budgets.json として配置され、以後はそのファイルだけを編集する。ドキュメントとスクリプトは配置後のファイルを参照する。wcagMinPx（SC 2.5.8）、reflowPx（SC 1.4.10）、contrast.text と largeTextAndUi は WCAG 2.2 AA の要求値で下げられない。contrast.secondaryText は視覚階層のための意図的な緩和で AA を満たさない。それ以外は運用値で調整余地がある。",
+  "response": {
+    "directManipulationMs": 100,
+    "flowMs": 1000,
+    "attentionMs": 10000,
+    "simpleTaskSec": 60,
+    "notificationSec": 60,
+    "humanReplyHours": 24
+  },
+  "webVitals": {
+    "lcpMs": 2500,
+    "inpMs": 200,
+    "cls": 0.1
+  },
+  "bundle": {
+    "initialJsGzipKb": 150
+  },
+  "target": {
+    "minPx": 24,
+    "wcagMinPx": 24,
+    "gapPx": 8,
+    "touchMinPx": 44
+  },
+  "viewport": {
+    "designPx": 1440,
+    "minSupportedPx": 1024,
+    "reflowPx": 320
+  },
+  "contrast": {
+    "text": 4.5,
+    "secondaryText": 3.0,
+    "largeTextAndUi": 3.0
+  },
+  "text": {
+    "maxRatioOfPrint": 0.5,
+    "headingLevels": [
+      2,
+      3
+    ]
+  },
+  "test": {
+    "usersPerRound": 5,
+    "rounds": 3,
+    "findRatioOneUser": 0.31,
+    "findRatioFiveUsers": 0.85
+  },
+  "themes": [
+    "light",
+    "dark",
+    "high-contrast"
+  ],
+  "states": [
+    "loading",
+    "empty",
+    "partial",
+    "error",
+    "forbidden",
+    "success"
+  ],
+  "designDebtReturnYears": [
+    2,
+    3
+  ]
+}
